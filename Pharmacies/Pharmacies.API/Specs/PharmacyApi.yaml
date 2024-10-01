@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: Pharmacies.API
+  version: '1.0'
+paths:
+  /api/Pharmacies:
+    get:
+      tags:
+        - Pharmacies
+      operationId: GetPharmacies
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetPharmaciesResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPharmaciesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetPharmaciesResponse'
+  /api/Pharmacies/import:
+    post:
+      tags:
+        - Pharmacies
+      operationId: ImportPharmacies
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              file:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ImportPharmaciesResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportPharmaciesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ImportPharmaciesResponse'
+  /api/Pharmacies/update-post-codes:
+    post:
+      tags:
+        - Pharmacies
+      operationId: UpdatePostCodes
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    GetPharmaciesResponse:
+      required:
+        - pharmacies
+      type: object
+      properties:
+        pharmacies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PharmacyListItem'
+      additionalProperties: false
+    ImportPharmaciesResponse:
+      type: object
+      properties:
+        pharmaciesUploaded:
+          type: integer
+          format: int32
+      additionalProperties: false
+    PharmacyListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        postCode:
+          type: string
+          nullable: true
+      additionalProperties: false
