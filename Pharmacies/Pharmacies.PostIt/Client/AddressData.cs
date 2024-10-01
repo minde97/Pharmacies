@@ -11,10 +11,10 @@ public class AddressData
 
 	public string Street { get; set; }
 
-	public int Number { get; set; }
+	public string Number { get; set; }
 
 	[JsonPropertyName("only_number")]
-	public int OnlyNumber { get; set; }
+	public string OnlyNumber { get; set; }
 
 	public string Housing { get; set; }
 

@@ -2,17 +2,8 @@
 
 namespace Pharmacies.PostIt.Client;
 
-public class PostItClient : IPostItClient
+public class PostItClient(HttpClient httpClient, string key) : IPostItClient
 {
-	private readonly HttpClient httpClient;
-	private readonly string key;
-
-	public PostItClient(HttpClient httpClient, string key)
-	{
-		this.httpClient = httpClient;
-		this.key = key;
-	}
-
 	public async Task<string> GetPostCode(string address, CancellationToken cancellationToken)
 	{
 		if (string.IsNullOrWhiteSpace(address))
@@ -23,18 +14,25 @@ public class PostItClient : IPostItClient
 		var requestUri = $"?term={address.Replace(' ', '+')}&key={key}";
 		var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
-		var response = await httpClient.SendAsync(request, cancellationToken);
-
-		response.EnsureSuccessStatusCode();
-
-		var content = await response.Content.ReadFromJsonAsync<PostItClientResponse>(cancellationToken: cancellationToken);
-
-		if (content != null && !string.IsNullOrWhiteSpace(content.Data.FirstOrDefault()?.PostCode))
+		try
 		{
-			return content.Data.FirstOrDefault()?.PostCode ?? string.Empty;
-		}
+			var response = await httpClient.SendAsync(request, cancellationToken);
 
-		return string.Empty;
+			response.EnsureSuccessStatusCode();
+
+			var content = await response.Content.ReadFromJsonAsync<PostItClientResponse>(cancellationToken: cancellationToken);
+
+			if (content != null && !string.IsNullOrWhiteSpace(content.Data.FirstOrDefault()?.PostCode))
+			{
+				return content.Data.FirstOrDefault()?.PostCode ?? string.Empty;
+			}
+
+			return string.Empty;
+		}
+		catch
+		{
+			return string.Empty;
+		}
 	}
 }
 
