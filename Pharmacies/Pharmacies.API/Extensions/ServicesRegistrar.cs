@@ -6,7 +6,7 @@ using Pharmacies.API.Features.Pharmacies.ImportPharmacies;
 using Pharmacies.API.Infrastructure;
 using Pharmacies.PostIt.Client;
 
-namespace Pharmacies.API;
+namespace Pharmacies.API.Extensions;
 
 public static class ServicesRegistrar
 {
@@ -22,7 +22,7 @@ public static class ServicesRegistrar
 				cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 			});
 
-		services.AddDbContext<PharmaciesDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("Database")));
+		services.AddDbContext<PharmaciesDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DbConnectionString")));
 		services.AddHttpClient();
 
 		services.AddTransient<IPostItClient>(_ =>

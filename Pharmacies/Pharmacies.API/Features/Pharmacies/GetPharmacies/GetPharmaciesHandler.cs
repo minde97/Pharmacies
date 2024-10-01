@@ -7,7 +7,6 @@ namespace Pharmacies.API.Features.Pharmacies.GetPharmacies;
 
 public class GetPharmaciesHandler(PharmaciesDbContext dbContext) : IRequestHandler<GetPharmaciesRequest, GetPharmaciesResponse>
 {
-
 	public Task<GetPharmaciesResponse> Handle(GetPharmaciesRequest request, CancellationToken cancellationToken)
 	{
 		return this.GetClients();
